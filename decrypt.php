@@ -1,23 +1,81 @@
 <?php
+/*
+ * 
+ * 
+ * 
+ * 
+ * decrypt.php
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * LICENCE
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * ALL RIGHTS RESERVED.
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * YOU ARE NOT ALLOWED TO COPY/EDIT/SHARE/WHATEVER.
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * IN CASE OF ANY PROBLEM CONTACT AUTHOR.
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * @author    Łukasz Szpak (szpaaaaq@gmail.com)
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * Copyright 2017 SzpaQ <ShopingBook>
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * @license   ALL RIGHTS RESERVED
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * * */
 
-	function encrypt($data)
-	
-    {
-		$key = file_get_contents('hash');
-		
-        $l = strlen($key);
-        if ($l < 16)
-            $key = str_repeat($key, ceil(16/$l));
-
-        if ($m = strlen($data)%8)
-            $data .= str_repeat("\x00",  8 - $m);
-        if (function_exists('mcrypt_encrypt'))
-            $val = mcrypt_encrypt(MCRYPT_BLOWFISH, $key, $data, MCRYPT_MODE_ECB);
-        else
-            $val = openssl_encrypt($data, 'BF-ECB', $key, OPENSSL_RAW_DATA | OPENSSL_NO_PADDING);
-
-        return gzdeflate($val);
-    }
     function decrypt($data)
     {
 		$key = file_get_contents('hash');
@@ -37,7 +95,10 @@
     }
 
 	$x = scandir('encrypted');
-	echo 'Kopiuję pliki...'.PHP_EOL;
+	echo 'Copying Files...'.PHP_EOL;
+
+	if(!file_exists('decrypted')) mkdir('decrypted', 0755);
+
 	foreach ($x as $k => $v)
 	
 	{
@@ -46,14 +107,15 @@
 		
 	}
 	$x = scandir('decrypted');
-	echo 'Rozszyfrowuje...'.PHP_EOL;
+	echo 'Decrypting...'.PHP_EOL;
 	foreach ($x as $k => $v)
 	{
 		if(is_dir($v)) continue;
 		file_put_contents('decrypted/'.$v, decrypt(file_get_contents('decrypted/'.$v)));
-		
+		echo '.';
+
 	}
-	echo 'Zrobione!'.PHP_EOL;
+	echo 'Done!'.PHP_EOL;
 	
 	
 

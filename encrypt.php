@@ -1,5 +1,80 @@
 <?php
-	
+/*
+ * 
+ * 
+ * 
+ * 
+ * encrypt.php
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * LICENCE
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * ALL RIGHTS RESERVED.
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * YOU ARE NOT ALLOWED TO COPY/EDIT/SHARE/WHATEVER.
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * IN CASE OF ANY PROBLEM CONTACT AUTHOR.
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * @author    Łukasz Szpak (szpaaaaq@gmail.com)
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * Copyright 2017 SzpaQ <ShopingBook>
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * @license   ALL RIGHTS RESERVED
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * * */
 
 	function encrypt($data)
 	
@@ -19,27 +94,11 @@
 
         return gzdeflate($val);
     }
-    function decrypt($data)
-    {
-		$key = file_get_contents('hash');
-
-
-		$data = gzinflate($data);
-        $l = strlen($key);
-        if ($l < 16)
-            $key = str_repeat($key, ceil(16/$l));
-
-        if (function_exists('mcrypt_encrypt'))
-            $val = mcrypt_decrypt(MCRYPT_BLOWFISH, $key, $data, MCRYPT_MODE_ECB);
-        else
-            $val = openssl_decrypt($data, 'BF-ECB', $key, OPENSSL_RAW_DATA | OPENSSL_NO_PADDING);
-			$val = rtrim($val, "\0");
-        return $val;
-    }
 
 	$x = scandir('files');
-	echo 'Szyfruje pliki...';
+	echo 'Encrypting files...';
 
+	if(!file_exists('encrypted')) mkdir('encrypted', 0755);
 	foreach ($x as $k => $v)
 	
 	{
@@ -48,25 +107,10 @@
 		$file = file_get_contents('files/'.$v);
 
 		$save = encrypt($file);
-		echo '.';
-		file_put_contents('encrypted/'.$v, $save);
 		
-	//	exec('tar -czvf encrypted/'.$v. '.tar.gz encrypted/'.$v);
+		echo '.';
+		
+		file_put_contents('encrypted/'.$v, $save);
 
-	//	unlink('encrypted/'.$v);
 	}
-	echo PHP_EOL.'Zrobione! Spakuj pliki, aby zaoszczędzić miejsce na dysku'.PHP_EOL;
-
-	
-
-/*
-
-	$file = file_get_contents('img.jpg');
-
-	$save = encrypt($file);
-	
-	file_put_contents('img.en', $save);
-
-	exec('tar -czvf image.tar.gz img.base64');
-
-	unlink('img.en');*/
+	echo PHP_EOL.'Done!'.PHP_EOL;
