@@ -15,8 +15,8 @@ you will find encrypted files  in encrypted directory
 Decrypting:
 
 put encrypted files into "encrypted" directory
-
-	run command php decrypt.php
+run command
+	php decrypt.php
 
 you will find decrypted files  in decrypted directory
 
