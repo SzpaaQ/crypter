@@ -1,5 +1,5 @@
 # crypter
-Crypt and encrypt files PHP
+Encrypt and decrypt files PHP
 Encrypting:
 
 put your file you want to encrypt into "files directory"
