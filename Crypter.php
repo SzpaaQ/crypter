@@ -97,7 +97,72 @@ class Crypter
         return $val;
         
 	}
-	
+
+	/**
+	 * Encrypt file
+	 * @param string $source source file
+	 * @param mixed $key hash, if this string is path to file which actually exists it will use file as hash
+	 * @param string $target (optionsl) target file if You'd like to save it
+	 * @return string encrypted string or false if file not exists
+	 * */
+	 public static function encryptFile($source, $key, $target = null)
+	 {
+		 
+		 if(!file_exists($source))
+
+			return false;
+
+		$string = file_get_contents($source);
+
+		$encrypted = self::encrypt($string, $key);
+
+		if($target !== null)
+		{
+
+			self::TargetDir(dirname($target));
+			
+			file_put_contents($target, $encrypted);
+			
+		}
+
+		return $encrypted;
+		
+		 
+	 }
+	 
+	/**
+	 * Decrypt file
+	 * @param string $source source file
+	 * @param mixed $key hash, if this string is path to file which actually exists it will use file as hash
+	 * @param string $target (optionsl) target file if You'd like to save it
+	 * @return string decrypted string or false if file not exists
+	 * */
+	 public static function decryptFile($source, $key, $target = null)
+	 {
+		 
+		 if(!file_exists($source))
+
+			return false;
+
+		$string = file_get_contents($source);
+
+		$decrypted = self::decrypt($string, $key);
+
+		if($target !== null)
+		{
+			
+			self::TargetDir(dirname($target));
+			
+			file_put_contents($target, $decrypted);
+			
+		}
+
+		return $decrypted;
+		
+		 
+	 }
+
+
 	/**
 	 * Encrypt directory
 	 * @param string $source source directory
@@ -124,8 +189,6 @@ class Crypter
 				file_put_contents($target.$v, self::encrypt(file_get_contents($source.$v), $key));
 				
 		
-			
-		
 	}
 	
 	/**
@@ -134,7 +197,7 @@ class Crypter
 	 * @param string $target target directory
 	 * @param mixed $key hash, if this string is path to file which actually exists it will use file as hash
 	 * */
-	public function decryptDirectory($source, $target, $key)
+	public static function decryptDirectory($source, $target, $key)
 	{
 		
 		$source = self::TargetDir($source);

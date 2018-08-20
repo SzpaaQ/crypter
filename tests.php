@@ -1,5 +1,9 @@
 <?php
 
+error_reporting(E_ALL);
+
+ini_set('display_errors', 'On');
+
 
 
 
@@ -118,3 +122,4 @@ file_put_contents($targetencrypted .'/encrypted_string', $encrypted);
 
 echo Crypter::decryptDirectory($targetencrypted, $targetdecrypted , $key);
 
+echo Crypter::encryptFile('README.md', 'hash');
